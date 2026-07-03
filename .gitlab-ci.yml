@@ -1,0 +1,47 @@
+stages:
+  - build
+  - test
+  - docker
+
+variables:
+  PYTHON_VERSION: "3.12"
+
+install_dependencies:
+  stage: build
+  image: python:$PYTHON_VERSION
+  script:
+    - pip install -r requirements.txt
+
+code_quality:
+  stage: test
+  image: python:$PYTHON_VERSION
+  script:
+    - pip install -r requirements.txt
+    - black --check .
+    - isort --check-only .
+    - flake8 .
+    - pylint app/ tests/ app.py || true
+
+unit_tests:
+  stage: test
+  image: python:$PYTHON_VERSION
+  script:
+    - pip install -r requirements.txt
+    - pytest --cov=app --cov-report=xml --cov-fail-under=90
+  artifacts:
+    paths:
+      - coverage.xml
+    expire_in: 1 week
+
+build_docker:
+  stage: docker
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  script:
+    - docker build -t todo-app-image .
+    - docker save todo-app-image > todo-app-image.tar
+  artifacts:
+    paths:
+      - todo-app-image.tar
+    expire_in: 1 week
