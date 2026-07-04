@@ -27,7 +27,7 @@ unit_tests:
   image: python:$PYTHON_VERSION
   script:
     - pip install -r requirements.txt
-    - pytest --cov=app --cov-report=xml --cov-fail-under=90
+    - PYTHONPATH=. pytest --cov=app --cov-report=xml --cov-fail-under=90
   artifacts:
     paths:
       - coverage.xml

@@ -34,7 +34,7 @@ pipeline {
             steps {
                 sh '''
                 . venv/bin/activate
-                pytest --cov=app --cov-report=xml --cov-fail-under=90
+                PYTHONPATH=. pytest --cov=app --cov-report=xml --cov-fail-under=90
                 '''
             }
             post {
