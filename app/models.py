@@ -1,12 +1,15 @@
 """
 Data models for the application.
 """
+
 from dataclasses import dataclass
 from typing import Optional
+
 
 @dataclass
 class Todo:
     """Todo data model."""
+
     id: int
     title: str
     description: Optional[str]

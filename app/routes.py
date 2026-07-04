@@ -1,17 +1,21 @@
 """
 API Routing for Todos.
 """
+
 from flask import Blueprint, request
+
 from . import services
 from .utils import create_response
 
 todo_bp = Blueprint("todos", __name__, url_prefix="/todos")
+
 
 @todo_bp.route("", methods=["GET"])
 def get_todos():
     """Get all todos."""
     todos = services.get_all_todos()
     return create_response(data=[t.to_dict() for t in todos])
+
 
 @todo_bp.route("/<int:todo_id>", methods=["GET"])
 def get_todo(todo_id: int):
@@ -20,6 +24,7 @@ def get_todo(todo_id: int):
     if not todo:
         return create_response(error="Todo not found", status_code=404)
     return create_response(data=todo.to_dict())
+
 
 @todo_bp.route("", methods=["POST"])
 def create_todo():
@@ -32,6 +37,7 @@ def create_todo():
     description = data.get("description")
     todo = services.create_todo(title, description)
     return create_response(data=todo.to_dict(), status_code=201)
+
 
 @todo_bp.route("/<int:todo_id>", methods=["PUT"])
 def update_todo(todo_id: int):
@@ -50,6 +56,7 @@ def update_todo(todo_id: int):
 
     return create_response(data=todo.to_dict())
 
+
 @todo_bp.route("/<int:todo_id>", methods=["DELETE"])
 def delete_todo(todo_id: int):
     """Delete a todo."""
@@ -57,6 +64,7 @@ def delete_todo(todo_id: int):
     if not success:
         return create_response(error="Todo not found", status_code=404)
     return create_response(data={"message": "Todo deleted successfully"})
+
 
 @todo_bp.route("/<int:todo_id>/complete", methods=["PATCH"])
 def complete_todo(todo_id: int):
@@ -66,6 +74,7 @@ def complete_todo(todo_id: int):
         return create_response(error="Todo not found", status_code=404)
     return create_response(data=todo.to_dict())
 
+
 @todo_bp.route("/search", methods=["GET"])
 def search_todos():
     """Search for todos."""
@@ -73,11 +82,13 @@ def search_todos():
     todos = services.search_todos(query)
     return create_response(data=[t.to_dict() for t in todos])
 
+
 @todo_bp.route("/completed", methods=["GET"])
 def get_completed_todos():
     """Get all completed todos."""
     todos = services.filter_completed()
     return create_response(data=[t.to_dict() for t in todos])
+
 
 @todo_bp.route("/pending", methods=["GET"])
 def get_pending_todos():

@@ -1,8 +1,10 @@
 """
 Database connection and initialization module.
 """
+
 import os
 import sqlite3
+
 
 def get_db_connection() -> sqlite3.Connection:
     """Create and return a database connection."""
@@ -10,6 +12,7 @@ def get_db_connection() -> sqlite3.Connection:
     conn = sqlite3.connect(database_url)
     conn.row_factory = sqlite3.Row
     return conn
+
 
 def init_db() -> None:
     """Initialize the database with the required tables."""

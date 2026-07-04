@@ -1,8 +1,11 @@
 """
 Main application factory module.
 """
+
 from flask import Flask
+
 from .database import init_db
+
 
 def create_app(test_config=None) -> Flask:
     """Create and configure the Flask application."""
@@ -15,6 +18,7 @@ def create_app(test_config=None) -> Flask:
         init_db()
 
     from .routes import todo_bp
+
     app.register_blueprint(todo_bp)
 
     return app

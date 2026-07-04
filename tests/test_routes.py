@@ -1,12 +1,15 @@
 """
 Unit tests for API routes.
 """
+
 import json
+
 
 def test_get_todos_empty(client):
     response = client.get("/todos")
     assert response.status_code == 200
     assert response.json["data"] == []
+
 
 def test_create_todo_route(client):
     response = client.post(
@@ -17,6 +20,7 @@ def test_create_todo_route(client):
     assert response.status_code == 201
     assert response.json["data"]["title"] == "Buy Milk"
 
+
 def test_create_todo_invalid(client):
     response = client.post(
         "/todos",
@@ -24,6 +28,7 @@ def test_create_todo_invalid(client):
         content_type="application/json",
     )
     assert response.status_code == 400
+
 
 def test_get_todo_route(client):
     create_res = client.post(
@@ -36,6 +41,7 @@ def test_get_todo_route(client):
     response = client.get(f"/todos/{todo_id}")
     assert response.status_code == 200
     assert response.json["data"]["title"] == "Test"
+
 
 def test_update_todo_route(client):
     create_res = client.post(
@@ -54,6 +60,7 @@ def test_update_todo_route(client):
     assert response.json["data"]["title"] == "Updated"
     assert response.json["data"]["status"] == "completed"
 
+
 def test_delete_todo_route(client):
     create_res = client.post(
         "/todos",
@@ -68,6 +75,7 @@ def test_delete_todo_route(client):
     get_res = client.get(f"/todos/{todo_id}")
     assert get_res.status_code == 404
 
+
 def test_complete_todo_route(client):
     create_res = client.post(
         "/todos",
@@ -80,6 +88,7 @@ def test_complete_todo_route(client):
     assert response.status_code == 200
     assert response.json["data"]["status"] == "completed"
 
+
 def test_search_todos_route(client):
     client.post(
         "/todos",
@@ -89,6 +98,7 @@ def test_search_todos_route(client):
     response = client.get("/todos/search?q=Find")
     assert response.status_code == 200
     assert len(response.json["data"]) == 1
+
 
 def test_filter_completed_route(client):
     create_res = client.post(
@@ -102,6 +112,7 @@ def test_filter_completed_route(client):
     response = client.get("/todos/completed")
     assert response.status_code == 200
     assert len(response.json["data"]) >= 1
+
 
 def test_filter_pending_route(client):
     client.post(

@@ -1,11 +1,15 @@
 """
 Pytest configuration and fixtures.
 """
+
 import os
 import tempfile
+
 import pytest
+
 from app import create_app
 from app.database import init_db
+
 
 @pytest.fixture(autouse=True)
 def setup_database():
@@ -19,6 +23,7 @@ def setup_database():
 
     os.close(db_fd)
     os.unlink(db_path)
+
 
 @pytest.fixture
 def client():
